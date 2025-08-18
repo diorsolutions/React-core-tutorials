@@ -6,10 +6,11 @@ Minimalist dizayn, tezkor ishlash va kengaytiriladigan arxitekturaga ega.
 ---
 
 ## Let's see:😉
-### Pretty veiw
+
+### Pretty veiw🔥
 <img width="1918" height="973" alt="image" src="https://github.com/user-attachments/assets/2d67da54-9f0d-46e1-9c88-b3024e7c083d" />
 
-### Light + Dark mode:
+### Light + Dark mode:✅
 ![Uploading image.png…]()
 
 
@@ -53,3 +54,4 @@ my-v0-project/
 └── ...
 
 ```
+Commeent if your find same issue
