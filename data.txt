@@ -1,0 +1,49 @@
+Requirements:
+1. When a client submits the form, the order details must be sent to my Telegram bot using my bot token and chat ID.
+   - Bot Token: 8339267246:AAGJaJMjrvlm8BrBD3-49_ZE5PDpfa7RswQ
+   - Chat ID: 7396846682
+
+2. The order message should follow this exact template (Markdown formatted):
+
+Buyurtma tafsilotlari:
+
+🍔 *NEW FAST FOOD ORDER* #ORD230871  
+👤 *Customer Details:*  
+• Name: {name}  
+• Phone: {phone}  
+• Address: {address}  
+
+📍 *Location Details:*  
+• Current Location: {lat}, {lng}  
+• Coordinates: `{lat}, {lng}`  
+• [Open in Google Maps](https://maps.google.com/?q={lat},{lng})  
+• [Open in Yandex Maps](https://yandex.com/maps/?ll={lng},{lat}&z=16)  
+
+🛒 *Order Items:*  
+{loop over items with qty × price = total}  
+
+💰 *TOTAL: {grandTotal} so'm*  
+💵 *Payment Method: {paymentMethod}*  
+⏰ *Order Time:* {timestamp}  
+
+📋 *Action Required:*  
+1. ✅ Confirm order with customer  
+2. 🍳 Prepare food items  
+3. 🚗 Arrange delivery  
+4. 📞 Call customer before delivery  
+
+⚡ *Quick Actions:*  
+• Call: [{phone}](tel:{phone})  
+• Navigate: [Google Maps](https://maps.google.com/?q={lat},{lng})
+
+3. The message must use `parse_mode: "Markdown"` so that formatting works correctly.  
+
+4. On successful send to Telegram:
+   - Show only a **success message** to the client like:  
+     ✅ "Your order was successfully placed!"  
+   - Do not show the fallback warning ("⚠️ Telegram not configured...").  
+
+5. On error (e.g., wrong token or API failure):
+   - Show an error message and log the actual error.  
+
+Please fix my existing code, don’t rebuild from scratch. Only correct the Telegram integration logic to meet these requirements.
