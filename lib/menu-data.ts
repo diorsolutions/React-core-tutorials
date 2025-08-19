@@ -1,30 +1,30 @@
 export interface MenuItem {
-  id: string
+  id: string;
   name: {
-    uz: string
-    ru: string
-    en: string
-  }
+    uz: string;
+    ru: string;
+    en: string;
+  };
   description: {
-    uz: string
-    ru: string
-    en: string
-  }
-  price: number
-  image: string
-  category: string
-  popular?: boolean
-  stock: number
+    uz: string;
+    ru: string;
+    en: string;
+  };
+  price: number;
+  image: string;
+  category: string;
+  popular?: boolean;
+  stock: number;
 }
 
 export interface MenuCategory {
-  id: string
+  id: string;
   name: {
-    uz: string
-    ru: string
-    en: string
-  }
-  icon: string
+    uz: string;
+    ru: string;
+    en: string;
+  };
+  icon: string;
 }
 
 export const menuCategories: MenuCategory[] = [
@@ -64,9 +64,10 @@ export const menuCategories: MenuCategory[] = [
     },
     icon: "🍰",
   },
-]
+];
 
-export const menuItems: MenuItem[] = [
+// Initial default menu items
+const defaultMenuItems: MenuItem[] = [
   // Burgers
   {
     id: "classic-burger",
@@ -229,96 +230,160 @@ export const menuItems: MenuItem[] = [
     category: "desserts",
     stock: 14,
   },
-]
+];
+
+// Dynamic menuItems array that can be modified
+export let menuItems: MenuItem[] = [...defaultMenuItems];
 
 export const stockManager = {
   getStock: (itemId: string): number => {
-    const item = menuItems.find((item) => item.id === itemId)
-    return item?.stock || 0
+    const item = menuItems.find((item) => item.id === itemId);
+    return item?.stock || 0;
   },
 
   updateStock: (itemId: string, quantity: number): boolean => {
-    const itemIndex = menuItems.findIndex((item) => item.id === itemId)
-    if (itemIndex === -1) return false
+    const itemIndex = menuItems.findIndex((item) => item.id === itemId);
+    if (itemIndex === -1) return false;
 
-    const newStock = menuItems[itemIndex].stock - quantity
-    if (newStock < 0) return false
+    const newStock = menuItems[itemIndex].stock - quantity;
+    if (newStock < 0) return false;
 
-    menuItems[itemIndex].stock = newStock
-    return true
+    menuItems[itemIndex].stock = newStock;
+
+    // Save to localStorage when stock is updated
+    adminManager.saveToStorage();
+    return true;
   },
 
   isInStock: (itemId: string, requestedQuantity = 1): boolean => {
-    const item = menuItems.find((item) => item.id === itemId)
-    return item ? item.stock >= requestedQuantity : false
+    const item = menuItems.find((item) => item.id === itemId);
+    return item ? item.stock >= requestedQuantity : false;
   },
-}
+};
 
 export const adminManager = {
   getAllProducts: (): MenuItem[] => {
-    return [...menuItems]
+    // Always return current menuItems (which includes localStorage data)
+    return [...menuItems];
   },
 
   addProduct: (product: MenuItem): boolean => {
     try {
-      menuItems.push(product)
-      adminManager.saveToStorage()
-      return true
+      menuItems.push(product);
+      adminManager.saveToStorage();
+      // Trigger multiple events to ensure all components are notified
+      adminManager.triggerAllEvents();
+      return true;
     } catch (error) {
-      console.error("Error adding product:", error)
-      return false
+      console.error("Error adding product:", error);
+      return false;
     }
   },
 
   updateProduct: (productId: string, updatedProduct: MenuItem): boolean => {
     try {
-      const index = menuItems.findIndex((item) => item.id === productId)
-      if (index === -1) return false
+      const index = menuItems.findIndex((item) => item.id === productId);
+      if (index === -1) return false;
 
-      menuItems[index] = updatedProduct
-      adminManager.saveToStorage()
-      return true
+      menuItems[index] = updatedProduct;
+      adminManager.saveToStorage();
+      // Trigger multiple events to ensure all components are notified
+      adminManager.triggerAllEvents();
+      return true;
     } catch (error) {
-      console.error("Error updating product:", error)
-      return false
+      console.error("Error updating product:", error);
+      return false;
     }
   },
 
   deleteProduct: (productId: string): boolean => {
     try {
-      const index = menuItems.findIndex((item) => item.id === productId)
-      if (index === -1) return false
+      const index = menuItems.findIndex((item) => item.id === productId);
+      if (index === -1) return false;
 
-      menuItems.splice(index, 1)
-      adminManager.saveToStorage()
-      return true
+      menuItems.splice(index, 1);
+      adminManager.saveToStorage();
+      // Trigger multiple events to ensure all components are notified
+      adminManager.triggerAllEvents();
+      return true;
     } catch (error) {
-      console.error("Error deleting product:", error)
-      return false
+      console.error("Error deleting product:", error);
+      return false;
     }
   },
 
   saveToStorage: (): void => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("admin-menu-items", JSON.stringify(menuItems))
+      try {
+        localStorage.setItem("admin-menu-items", JSON.stringify(menuItems));
+        console.log("Menu items saved to localStorage:", menuItems.length);
+      } catch (error) {
+        console.error("Error saving to localStorage:", error);
+      }
     }
   },
 
   loadFromStorage: (): void => {
     if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("admin-menu-items")
-      if (stored) {
-        try {
-          const parsedItems = JSON.parse(stored)
-          menuItems.splice(0, menuItems.length, ...parsedItems)
-        } catch (error) {
-          console.error("Error loading from storage:", error)
+      try {
+        const stored = localStorage.getItem("admin-menu-items");
+        if (stored) {
+          const parsedItems = JSON.parse(stored);
+          // Clear current items and replace with stored items
+          menuItems.splice(0, menuItems.length, ...parsedItems);
+          console.log("Menu items loaded from localStorage:", menuItems.length);
+        } else {
+          console.log("No stored menu items found, using defaults");
         }
+      } catch (error) {
+        console.error("Error loading from storage:", error);
+        // If error, reset to default items
+        menuItems.splice(0, menuItems.length, ...defaultMenuItems);
       }
     }
   },
-}
 
+  // Enhanced event triggering with multiple approaches
+  triggerAllEvents: (): void => {
+    if (typeof window !== "undefined") {
+      // Approach 1: Custom event for same-tab updates
+      const customEvent = new CustomEvent("menuItemsUpdated", {
+        detail: {
+          menuItems: [...menuItems],
+          timestamp: Date.now(),
+        },
+      });
+      window.dispatchEvent(customEvent);
+
+      // Approach 2: Manual storage event (for same-tab localStorage changes)
+      const storageEvent = new StorageEvent("storage", {
+        key: "admin-menu-items",
+        newValue: JSON.stringify(menuItems),
+        storageArea: localStorage,
+      });
+      window.dispatchEvent(storageEvent);
+
+      // Approach 3: Force a delayed custom event (backup)
+      setTimeout(() => {
+        const delayedEvent = new CustomEvent("forceMenuUpdate", {
+          detail: { menuItems: [...menuItems] },
+        });
+        window.dispatchEvent(delayedEvent);
+      }, 100);
+
+      console.log("All events triggered for menu update");
+    }
+  },
+
+  // Reset to default items (useful for testing)
+  resetToDefault: (): void => {
+    menuItems.splice(0, menuItems.length, ...defaultMenuItems);
+    adminManager.saveToStorage();
+    adminManager.triggerAllEvents();
+  },
+};
+
+// Initialize from localStorage on load
 if (typeof window !== "undefined") {
-  adminManager.loadFromStorage()
+  adminManager.loadFromStorage();
 }

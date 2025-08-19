@@ -16,26 +16,20 @@ const translations = {
     // App general
     "app.title": "Tez Ovqat",
     "app.subtitle": "Sevimli taomlaringizni buyurtma qiling",
-    "app.bonus": "Yangi & Sifatli Mahsulotlar",
-    "app.delivery_only": "Tez Yetkazib berish",
-    "app.quantity_g": "Sifat Kafolatlanadi!",
-    "app.menu_back": "Orqaga qaytish",
-    "app.populars": "⭐ Mashhur",
-    "app.stocks": "Sotuvda yo'q",
+    "app.out_stock": "Sotuvda yo'q",
+    "app.ingredients": "Yangi mahsulotlar",
+    "app.delivery": "Tez yetkazib berish",
+    "app.quality": "Sifat Kafolatlanadi",
+    "app.popularity": "⭐ Mashhur",
+    "app.details": "Batafsil ko'rish",
     "app.stock": "ta qoldi",
-    "app.left": " ta qoldi",
-    "app.view": "Batafsil ko'rish",
-    "app.only": "Faqat ",
-    "app.quantitys": "Miqdor",
-    "app.quant": "ta qo'shing",
-    "app.add": "Savatga",
-    "app.total": "Narxi",
-    "app.edit": "Tahrirlash",
-    "app.pro_name": "Mahsulot nomi",
-    "app.pro_desc": "Mahsulot tavsifi haqida ayting",
-    "app.pro_des": "Tavsifi",
-    "app.manage": "Mahsulotlar boshqaruvi",
-    "app.maximum": "- tagacha buyurtma berish mumkin",
+    "app.price": "Narxi",
+    "app.cart": "Savatga",
+    "app.back": "Orqaga",
+    "app.add_cart": "ta qo'shing",
+    "app.quantity": "Miqdori",
+    "app.characters": "ta belgiga ruxsat",
+    "app.maximumOrder": "ta buyurtma berish mumkin",
 
     // Navigation
     "nav.menu": "Menyu",
@@ -45,6 +39,9 @@ const translations = {
     // Alerts
     "alert.cash_only": "Buyurtma faqat naqd pulda",
     "alert.ok": "OK",
+    "alert.location_required": "Joylashuvga ruxsat berishingiz zarur!",
+    "alert.location_required_message":
+      "Manzilingizni to'g'ri topishimiz uchun joylashuvga ruxsat berishingiz kerak. Iltimos, joylashuvga ruxsat bering..!!",
     "alert.location_permission": "Joylashuvga ruxsat berasizmi?",
     "alert.allow": "Ruxsat berish",
     "alert.deny": "Rad etish",
@@ -90,15 +87,17 @@ const translations = {
 
     // Order Success
     "order.success_title": "Buyurtma muvaffaqiyatli yuborildi!",
-    "order.success_message": "Sizning buyurtmangizni tayyorlamoqdamiz!",
+    "order.success_message":
+      "Sizning buyurtmangiz tayyorlandi va jamoamizga yuborish uchun tayyor.",
     "order.contact_soon":
       "Yetkazib berish tafsilotlarini tasdiqlash uchun tez orada siz bilan bog'lanamiz.",
 
     // Telegram
-    "telegram.configured": "Tez orada siz bilan bog'lanamiz",
+    "telegram.configured": "Telegram tayyor",
     "telegram.manual_mode": "Qo'lda rejim",
     "telegram.message_preview": "Buyurtma tafsilotlari:",
-    "telegram.auto_sent": "Tez orada Kuryer siz bilan bog'lanadi!.",
+    "telegram.auto_sent":
+      "Bu buyurtma avtomatik ravishda Telegram botingizga yuboriladi.",
     "telegram.manual_required": "Telegram sozlanmagan - qo'lda nusxalash kerak",
     "telegram.copy_message": "Buyurtma xabarini nusxalash",
     "telegram.copied": "Nusxalandi!",
@@ -109,30 +108,25 @@ const translations = {
     // Common
     "common.close": "Yopish",
   },
+
   ru: {
     // App general
     "app.title": "Быстрая Еда",
     "app.subtitle": "Заказывайте любимые блюда",
-    "app.bonus": "Новые и качественные продукты",
-    "app.delivery_only": "Быстрая доставка",
-    "app.quantity_g": "Гарантия качества!",
-    "app.menu_back": "Назад",
-    "app.populars": "⭐ Популярное",
-    "app.stocks": "Нет в продаже",
-    "app.stock": " осталось",
-    "app.left": " осталось",
-    "app.view": "Подробнее",
-    "app.only": "Только ",
-    "app.quantitys": "Количество",
-    "app.quant": "добавить",
-    "app.add": "В корзину",
-    "app.total": "Цена",
-    "app.edit": "Редактировать",
-    "app.pro_name": "Название продукта",
-    "app.pro_desc": "Опишите продукт",
-    "app.pro_des": "Описание",
-    "app.manage": "Управление продуктами",
-    "app.maximum": "Можно заказать до - штук",
+    "app.out_stock": "Нет в наличии",
+    "app.ingredients": "Свежие продукты",
+    "app.delivery": "Быстрая доставка",
+    "app.quality": "Гарантия качества",
+    "app.popularity": "⭐ Популярное",
+    "app.details": "Посмотреть подробнее",
+    "app.stock": "осталось",
+    "app.price": "Цена",
+    "app.cart": "В корзину",
+    "app.back": "Назад",
+    "app.add_cart": "добавить",
+    "app.quantity": "Количество",
+    "app.characters": "символов разрешено",
+    "app.maximumOrder": "максимум заказов",
 
     // Navigation
     "nav.menu": "Меню",
@@ -142,6 +136,9 @@ const translations = {
     // Alerts
     "alert.cash_only": "Заказ только за наличные",
     "alert.ok": "OK",
+    "alert.location_required": "Требуется доступ к местоположению!",
+    "alert.location_required_message":
+      "Чтобы правильно найти ваш адрес, необходимо разрешить доступ к местоположению. Пожалуйста, разрешите доступ..!!",
     "alert.location_permission": "Разрешить доступ к местоположению?",
     "alert.allow": "Разрешить",
     "alert.deny": "Отклонить",
@@ -176,7 +173,7 @@ const translations = {
     // Theme
     "theme.light": "Светлая",
     "theme.dark": "Тёмная",
-    "theme.system": "Системная",
+    "theme.system": "Система",
 
     // Product Customization
     "product.customize": "Хотите внести изменения?",
@@ -187,15 +184,17 @@ const translations = {
 
     // Order Success
     "order.success_title": "Заказ успешно отправлен!",
-    "order.success_message": "Ваш заказ готовится!",
+    "order.success_message":
+      "Ваш заказ подготовлен и готов к отправке нашей команде.",
     "order.contact_soon":
       "Мы свяжемся с вами в ближайшее время для подтверждения деталей доставки.",
 
     // Telegram
-    "telegram.configured": "Скоро мы свяжемся с вами",
+    "telegram.configured": "Telegram готов",
     "telegram.manual_mode": "Ручной режим",
     "telegram.message_preview": "Детали заказа:",
-    "telegram.auto_sent": "Скоро курьер свяжется с вами!.",
+    "telegram.auto_sent":
+      "Этот заказ будет автоматически отправлен в ваш Telegram бот.",
     "telegram.manual_required":
       "Telegram не настроен - требуется ручное копирование",
     "telegram.copy_message": "Копировать сообщение заказа",
@@ -207,30 +206,25 @@ const translations = {
     // Common
     "common.close": "Закрыть",
   },
+
   en: {
     // App general
     "app.title": "Fast Food",
     "app.subtitle": "Order your favorite meals",
-    "app.bonus": "New & High-Quality Products",
-    "app.delivery_only": "Fast Delivery",
-    "app.quantity_g": "Quality Guaranteed!",
-    "app.menu_back": "Back",
-    "app.populars": "⭐ Popular",
-    "app.stocks": "Out of stock",
-    "app.stock": " left",
-    "app.left": " left",
-    "app.view": "View Details",
-    "app.only": "Only ",
-    "app.quantitys": "Quantity",
-    "app.quant": "add",
-    "app.add": "Add to Cart",
-    "app.total": "Price",
-    "app.edit": "Edit",
-    "app.pro_name": "Product Name",
-    "app.pro_desc": "Describe the product",
-    "app.pro_des": "Description",
-    "app.manage": "Product Management",
-    "app.maximum": "You can order up to - items",
+    "app.out_stock": "Out of stock",
+    "app.ingredients": "Fresh ingredients",
+    "app.delivery": "Fast delivery",
+    "app.quality": "Quality guaranteed",
+    "app.popularity": "⭐ Popular",
+    "app.details": "View details",
+    "app.stock": "left",
+    "app.price": "Price",
+    "app.cart": "Add to cart",
+    "app.back": "Back",
+    "app.add_cart": "add",
+    "app.quantity": "Quantity",
+    "app.characters": "characters allowed",
+    "app.maximumOrder": "maximum orders",
 
     // Navigation
     "nav.menu": "Menu",
@@ -240,6 +234,9 @@ const translations = {
     // Alerts
     "alert.cash_only": "Order only with cash",
     "alert.ok": "OK",
+    "alert.location_required": "Location access is required!",
+    "alert.location_required_message":
+      "To find your address correctly, you need to allow location access. Please allow it..!!",
     "alert.location_permission": "Allow location access?",
     "alert.allow": "Allow",
     "alert.deny": "Deny",
@@ -284,15 +281,17 @@ const translations = {
 
     // Order Success
     "order.success_title": "Order Submitted Successfully!",
-    "order.success_message": "We are preparing your order!",
+    "order.success_message":
+      "Your order has been prepared and is ready to be sent to our team.",
     "order.contact_soon":
       "We will contact you soon to confirm delivery details.",
 
     // Telegram
-    "telegram.configured": "We will contact you soon",
+    "telegram.configured": "Telegram Ready",
     "telegram.manual_mode": "Manual Mode",
     "telegram.message_preview": "Order Details:",
-    "telegram.auto_sent": "Courier will contact you soon!.",
+    "telegram.auto_sent":
+      "This order will be automatically sent to your Telegram bot.",
     "telegram.manual_required":
       "Telegram not configured - manual copy required",
     "telegram.copy_message": "Copy Order Message",

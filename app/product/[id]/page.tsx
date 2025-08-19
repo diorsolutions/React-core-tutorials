@@ -48,8 +48,8 @@ export default function ProductPage() {
     // Check stock availability
     if (!stockManager.isInStock(product.id, quantity)) {
       toast({
-        title: "Out of Stock",
-        description: `Faqat ${product.stock} ta mavjud`,
+        title: `{t("app.out_stock")}`,
+        description: `Only ${product.stock} items available`,
         variant: "destructive",
       });
       setIsLoading(false);
@@ -112,7 +112,7 @@ export default function ProductPage() {
           <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
           <Button onClick={() => router.push("/")} variant="outline">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            {t("app.menu_back")}
+            {t("app.back")}
           </Button>
         </div>
       </div>
@@ -137,7 +137,7 @@ export default function ProductPage() {
             className="mb-2"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            {t("app.menu_back")}
+            {t("app.back")}
           </Button>
         </div>
       </div>
@@ -166,7 +166,7 @@ export default function ProductPage() {
                 </h1>
                 {product.popular && (
                   <Badge className="bg-[#302dbb] hover:bg-[#302dbb]/90">
-                    {t("app.populars")}
+                    {t("app.popularity")}
                   </Badge>
                 )}
               </div>
@@ -183,18 +183,18 @@ export default function ProductPage() {
                 {/* Stock Status */}
                 <div className="flex items-center gap-2">
                   {isOutOfStock ? (
-                    <Badge variant="destructive">{t("app.stocks")}</Badge>
+                    <Badge variant="destructive">Out of Stock</Badge>
                   ) : isLowStock ? (
                     <Badge
                       variant="secondary"
                       className="bg-orange-100 text-orange-800"
                     >
-                      Only {product.stock} left
+                      Faqat {product.stock} {t("app.stock")}
                     </Badge>
                   ) : (
                     <Badge
                       variant="secondary"
-                      className="bg-green-100 text-green-800"
+                      className="bg-white/90 text-black text-[15px]"
                     >
                       {product.stock} {t("app.stock")}
                     </Badge>
@@ -210,7 +210,7 @@ export default function ProductPage() {
               <div className="space-y-4">
                 <div>
                   <label className="text-sm font-medium mb-2 block">
-                    {t("app.quantitys")}
+                    {t("app.quantity")}
                   </label>
                   <div className="flex items-center gap-3">
                     <Button
@@ -237,7 +237,7 @@ export default function ProductPage() {
                   </div>
 
                   <p className="text-sm text-muted-foreground mt-2">
-                    {Math.min(10, product.stock)} {t("app.maximum")}
+                    Faqat {Math.min(10, product.stock)} {t("app.maximumOrder")}
                   </p>
                 </div>
 
@@ -268,7 +268,7 @@ export default function ProductPage() {
                         maxLength={200}
                       />
                       <p className="text-xs text-muted-foreground">
-                        Max {customization.length}/200 belgiga ruxsat
+                        {customization.length}/200 {t("app.characters")}
                       </p>
                     </div>
                   )}
@@ -277,7 +277,7 @@ export default function ProductPage() {
                 {/* Total Price */}
                 <div className="bg-muted/50 rounded-lg p-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-medium">{t("app.total")}:</span>
+                    <span className="text-lg font-medium">Total:</span>
                     <span className="text-2xl font-bold text-[#302dbb]">
                       {formatPrice(product.price * quantity)}
                     </span>
@@ -302,7 +302,7 @@ export default function ProductPage() {
                   size="lg"
                 >
                   <ShoppingCart className="w-5 h-5 mr-2" />
-                  {isLoading ? "Qo'shilmoqda..." : `${t("app.add")} ${quantity} ${t("app.quant")}`}
+                  {isLoading ? "Qo'shilmoqda..." : `${t("app.cart")} ${quantity} ${t("app.add_cart")}`}
                 </Button>
               </div>
             )}

@@ -1,185 +1,182 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import { MapPin, User, Phone, Home, Map, Loader2, X, CheckCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useLanguage } from "@/components/language-provider"
-import { InteractiveMap } from "@/components/interactive-map"
-import { storage } from "@/lib/storage"
-import type { CartItem } from "@/components/cart-sidebar"
+import type React from "react";
+import { useState, useEffect } from "react";
+// import { MapPin, User, Phone, Home, Map, Loader2, X, CheckCircle } from "lucide-react"
+import {
+  MapPin,
+  User,
+  Phone,
+  Home,
+  Map,
+  X,
+  CheckCircle,
+  Loader2,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLanguage } from "@/components/language-provider";
+import { InteractiveMap } from "@/components/interactive-map";
+import { storage } from "@/lib/storage";
+import type { CartItem } from "@/components/cart-sidebar";
 
 interface UserDetails {
-  name: string
-  phone: string
-  address: string
+  name: string;
+  phone: string;
+  address: string;
   location?: {
-    lat: number
-    lng: number
-    address: string
-  }
+    lat: number;
+    lng: number;
+    address: string;
+  };
 }
 
 interface UserDetailsFormProps {
-  cartItems: CartItem[]
-  onSubmit: (details: UserDetails) => void
-  onCancel: () => void
+  cartItems: CartItem[];
+  onSubmit: (details: UserDetails) => void;
+  onCancel: () => void;
 }
 
-export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFormProps) {
-  const { t } = useLanguage()
+export function UserDetailsForm({
+  cartItems,
+  onSubmit,
+  onCancel,
+}: UserDetailsFormProps) {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState<UserDetails>({
     name: "",
     phone: "",
     address: "",
-  })
-  const [isReturningCustomer, setIsReturningCustomer] = useState(false)
-  const [saveDetails, setSaveDetails] = useState(true)
-  const [errors, setErrors] = useState<{ name?: string; phone?: string; address?: string; location?: string }>({})
-  const [isLocationRequested, setIsLocationRequested] = useState(false)
-  const [showMap, setShowMap] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
+  });
+  const [isReturningCustomer, setIsReturningCustomer] = useState(false);
+  const [saveDetails, setSaveDetails] = useState(true);
+  interface FormErrors {
+    name?: string;
+    phone?: string;
+    address?: string;
+    location?: string;
+  }
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isLocationRequested, setIsLocationRequested] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = "hidden"
-    setIsVisible(true)
+    document.body.style.overflow = "hidden";
+    setIsVisible(true);
 
-    const savedDetails = storage.getUserDetails()
-    if (savedDetails && savedDetails.name && savedDetails.phone && savedDetails.address) {
-      setFormData(savedDetails)
-      setIsReturningCustomer(true)
-      console.log("[v0] Returning customer detected:", savedDetails)
+    const savedDetails = storage.getUserDetails();
+    if (
+      savedDetails &&
+      savedDetails.name &&
+      savedDetails.phone &&
+      savedDetails.address
+    ) {
+      setFormData(savedDetails);
+      setIsReturningCustomer(true);
+      console.log("[v0] Returning customer detected:", savedDetails);
     } else {
-      console.log("[v0] New customer - showing full form")
+      console.log("[v0] New customer - showing full form");
     }
 
     return () => {
-      document.body.style.overflow = "unset"
-    }
-  }, [])
+      document.body.style.overflow = "unset";
+    };
+  }, []);
 
   const validateForm = (): boolean => {
-    const newErrors: { name?: string; phone?: string; address?: string; location?: string } = {}
+    const newErrors: FormErrors = {};
 
     if (!isReturningCustomer) {
       if (!formData.name.trim()) {
-        newErrors.name = t("form.required") || "Required field"
+        newErrors.name = t("form.required") || "Required field";
       } else if (formData.name.trim().length < 2) {
-        newErrors.name = "Name must be at least 2 characters"
+        newErrors.name = "Name must be at least 2 characters";
       }
 
       if (!formData.address.trim()) {
-        newErrors.address = t("form.required") || "Required field"
+        newErrors.address = t("form.required") || "Required field";
       } else if (formData.address.trim().length < 10) {
-        newErrors.address = "Please provide a more detailed address"
+        newErrors.address = "Please provide a more detailed address";
       }
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = t("form.required") || "Required field"
+      newErrors.phone = t("form.required") || "Required field";
     } else if (!/^\+?[\d\s\-()]{9,}$/.test(formData.phone.trim())) {
-      newErrors.phone = "Please enter a valid phone number"
+      newErrors.phone = "Please enter a valid phone number";
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-  const handleInputChange = (field: keyof UserDetails, value: string) => {
-    console.log("[v0] Input change:", field, value)
-    setFormData((prev) => ({ ...prev, [field]: value }))
+  const handleInputChange = (
+    field: "name" | "phone" | "address",
+    value: string
+  ) => {
+    console.log("[v0] Input change:", field, value);
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }))
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
-  }
+  };
 
-  const handleLocationRequest = () => {
-    setIsLocationRequested(true)
-    console.log("[v0] Requesting geolocation...")
-
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords
-          console.log("[v0] Location obtained:", { latitude, longitude })
-
-          const locationData = {
-            lat: latitude,
-            lng: longitude,
-            address: `📍 Current Location (${latitude.toFixed(6)}, ${longitude.toFixed(6)})`,
-          }
-
-          setFormData((prev) => ({ ...prev, location: locationData }))
-          setIsLocationRequested(false)
-
-          console.log("[v0] Location data prepared for Telegram:", locationData)
-        },
-        (error) => {
-          console.error("[v0] Location error:", error)
-          setIsLocationRequested(false)
-          setErrors((prev) => ({ ...prev, location: "Unable to get location. Please try again or select manually." }))
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 300000,
-        },
-      )
-    } else {
-      setIsLocationRequested(false)
-      setErrors((prev) => ({ ...prev, location: "Geolocation is not supported by this browser." }))
-    }
-  }
-
-  const handleMapLocationSelect = (location: { lat: number; lng: number; address: string }) => {
-    console.log("[v0] Map location selected:", location)
-    setFormData((prev) => ({ ...prev, location }))
-    setShowMap(false)
-  }
+  const handleMapLocationSelect = (location: {
+    lat: number;
+    lng: number;
+    address: string;
+  }) => {
+    console.log("[v0] Map location selected:", location);
+    setFormData((prev) => ({ ...prev, location }));
+    setShowMap(false);
+  };
 
   const handleClose = () => {
-    setIsVisible(false)
+    setIsVisible(false);
     setTimeout(() => {
-      onCancel()
-    }, 200)
-  }
+      onCancel();
+    }, 200);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("[v0] Form submission started")
+    e.preventDefault();
+    console.log("[v0] Form submission started");
 
     if (!validateForm()) {
-      console.log("[v0] Form validation failed:", errors)
-      return
+      console.log("[v0] Form validation failed:", errors);
+      return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     try {
-      storage.setUserDetails(formData)
-      console.log("[v0] User details saved to localStorage")
+      storage.setUserDetails(formData);
+      console.log("[v0] User details saved to localStorage");
 
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      onSubmit(formData)
+      onSubmit(formData);
     } catch (error) {
-      console.error("[v0] Order submission error:", error)
-      setErrors({ name: "Something went wrong. Please try again." })
+      console.error("[v0] Order submission error:", error);
+      setErrors({ name: "Something went wrong. Please try again." });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("uz-UZ").format(price) + " so'm"
-  }
+    return new Intl.NumberFormat("uz-UZ").format(price) + " so'm";
+  };
 
-  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
     <>
@@ -203,9 +200,15 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
                     <User className="h-5 w-5" />
                     {isReturningCustomer
                       ? t("form.confirm_details") || "Buyurtma tasdiqlash"
-                      : t("form.delivery_details") || "Yetkazib berish ma'lumotlari"}
+                      : t("form.delivery_details") ||
+                        "Yetkazib berish ma'lumotlari"}
                   </CardTitle>
-                  <Button variant="ghost" size="sm" onClick={handleClose} className="h-8 w-8 p-0 hover:bg-gray-100">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleClose}
+                    className="h-8 w-8 p-0 hover:bg-gray-100"
+                  >
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
@@ -219,11 +222,16 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
                   </h3>
                   <div className="space-y-2 text-sm">
                     {cartItems.map((item, index) => (
-                      <div key={item.id} className="flex justify-between items-center py-1">
+                      <div
+                        key={item.id}
+                        className="flex justify-between items-center py-1"
+                      >
                         <span className="text-gray-700">
                           {item.name.en} x{item.quantity}
                         </span>
-                        <span className="font-medium">{formatPrice(item.price * item.quantity)}</span>
+                        <span className="font-medium">
+                          {formatPrice(item.price * item.quantity)}
+                        </span>
                       </div>
                     ))}
                     <div className="border-t pt-2 mt-3 font-bold flex justify-between text-[#302dbb]">
@@ -237,7 +245,10 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
                   {!isReturningCustomer && (
                     <>
                       <div className="space-y-2">
-                        <Label htmlFor="name" className="flex items-center gap-2 font-medium">
+                        <Label
+                          htmlFor="name"
+                          className="flex items-center gap-2 font-medium"
+                        >
                           <User className="h-4 w-4 text-[#302dbb]" />
                           Ism *
                         </Label>
@@ -245,7 +256,9 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
                           id="name"
                           type="text"
                           value={formData.name}
-                          onChange={(e) => handleInputChange("name", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("name", e.target.value)
+                          }
                           placeholder="Ism"
                           className={`w-full ${
                             errors.name
@@ -254,18 +267,25 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
                           }`}
                           autoComplete="name"
                         />
-                        {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
+                        {errors.name && (
+                          <p className="text-sm text-red-500">{errors.name}</p>
+                        )}
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="address" className="flex items-center gap-2 font-medium">
+                        <Label
+                          htmlFor="address"
+                          className="flex items-center gap-2 font-medium"
+                        >
                           <Home className="h-4 w-4 text-[#302dbb]" />
                           Manzil *
                         </Label>
                         <Textarea
                           id="address"
                           value={formData.address}
-                          onChange={(e) => handleInputChange("address", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("address", e.target.value)
+                          }
                           placeholder="Manzil"
                           className={`w-full resize-none ${
                             errors.address
@@ -275,7 +295,11 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
                           rows={3}
                           autoComplete="address-line1"
                         />
-                        {errors.address && <p className="text-sm text-red-500">{errors.address}</p>}
+                        {errors.address && (
+                          <p className="text-sm text-red-500">
+                            {errors.address}
+                          </p>
+                        )}
                       </div>
                     </>
                   )}
@@ -307,7 +331,10 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
                   )}
 
                   <div className="space-y-2">
-                    <Label htmlFor="phone" className="flex items-center gap-2 font-medium">
+                    <Label
+                      htmlFor="phone"
+                      className="flex items-center gap-2 font-medium"
+                    >
                       <Phone className="h-4 w-4 text-[#302dbb]" />
                       Telefon *
                     </Label>
@@ -315,7 +342,9 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
                       id="phone"
                       type="tel"
                       value={formData.phone}
-                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("phone", e.target.value)
+                      }
                       placeholder="+998 90 123 45 67"
                       className={`w-full ${
                         errors.phone
@@ -324,16 +353,18 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
                       }`}
                       autoComplete="tel"
                     />
-                    {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
+                    {errors.phone && (
+                      <p className="text-sm text-red-500">{errors.phone}</p>
+                    )}
                   </div>
 
                   <div className="space-y-3">
                     <Label className="flex items-center gap-2 font-medium">
                       <MapPin className="h-4 w-4 text-[#302dbb]" />
-                      Joylashuv (Optional)
+                      Joylashuv (Xaritadan tanlash)
                     </Label>
                     {!formData.location ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 gap-3">
                         <Button
                           type="button"
                           variant="outline"
@@ -343,35 +374,21 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
                           <Map className="h-4 w-4 mr-2" />
                           Xaritada tanlash
                         </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={handleLocationRequest}
-                          disabled={isLocationRequested}
-                          className="w-full hover:bg-[#302dbb]/5 hover:border-[#302dbb] disabled:opacity-50 bg-transparent"
-                        >
-                          {isLocationRequested ? (
-                            <>
-                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                              Getting location...
-                            </>
-                          ) : (
-                            <>
-                              <MapPin className="h-4 w-4 mr-2" />
-                              Get Current Location
-                            </>
-                          )}
-                        </Button>
                       </div>
                     ) : (
                       <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
                         <div className="flex items-start gap-3">
                           <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                           <div className="flex-1">
-                            <p className="text-sm font-medium text-green-800">Location captured:</p>
-                            <p className="text-sm text-green-700 font-mono mt-1">{formData.location.address}</p>
+                            <p className="text-sm font-medium text-green-800">
+                              Location captured:
+                            </p>
+                            <p className="text-sm text-green-700 font-mono mt-1">
+                              {formData.location.address}
+                            </p>
                             <p className="text-xs text-green-600 mt-1">
-                              Coordinates: {formData.location.lat.toFixed(6)}, {formData.location.lng.toFixed(6)}
+                              Coordinates: {formData.location.lat.toFixed(6)},{" "}
+                              {formData.location.lng.toFixed(6)}
                             </p>
                           </div>
                         </div>
@@ -389,7 +406,12 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
                             type="button"
                             variant="ghost"
                             size="sm"
-                            onClick={() => setFormData((prev) => ({ ...prev, location: undefined }))}
+                            onClick={() =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                location: undefined,
+                              }))
+                            }
                             className="h-auto p-2 text-xs hover:bg-red-100 text-red-600"
                           >
                             Remove location
@@ -397,7 +419,9 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
                         </div>
                       </div>
                     )}
-                    {errors.location && <p className="text-sm text-red-500">{errors.location}</p>}
+                    {errors.location && (
+                      <p className="text-sm text-red-500">{errors.location}</p>
+                    )}
                   </div>
 
                   <div className="flex gap-3 pt-6">
@@ -440,5 +464,5 @@ export function UserDetailsForm({ cartItems, onSubmit, onCancel }: UserDetailsFo
         />
       )}
     </>
-  )
+  );
 }

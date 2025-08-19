@@ -1,51 +1,51 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Plus, Minus, Eye, ShoppingCart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { useLanguage } from "@/components/language-provider";
-import type { MenuItem } from "@/lib/menu-data";
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { Plus, Minus, Eye, ShoppingCart } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { useLanguage } from "@/components/language-provider"
+import type { MenuItem } from "@/lib/menu-data"
 
 interface MenuItemCardProps {
-  item: MenuItem;
-  onAddToCart: (item: MenuItem, quantity: number) => void;
+  item: MenuItem
+  onAddToCart: (item: MenuItem, quantity: number) => void
 }
 
 export function MenuItemCard({ item, onAddToCart }: MenuItemCardProps) {
-  const [quantity, setQuantity] = useState(1);
-  const [isAdding, setIsAdding] = useState(false);
-  const { language, t } = useLanguage();
-  const router = useRouter();
+  const [quantity, setQuantity] = useState(1)
+  const [isAdding, setIsAdding] = useState(false)
+  const { language, t } = useLanguage()
+  const router = useRouter()
 
   const handleAddToCart = async () => {
     if (item.stock < quantity) {
-      return;
+      return
     }
 
-    setIsAdding(true);
-    onAddToCart(item, quantity);
+    setIsAdding(true)
+    onAddToCart(item, quantity)
 
     // Add bounce animation delay
     setTimeout(() => {
-      setIsAdding(false);
-      setQuantity(1);
-    }, 600);
-  };
+      setIsAdding(false)
+      setQuantity(1)
+    }, 600)
+  }
 
   const handleViewProduct = () => {
-    router.push(`/product/${item.id}`);
-  };
+    router.push(`/product/${item.id}`)
+  }
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("uz-UZ").format(price) + " so'm";
-  };
+    return new Intl.NumberFormat("uz-UZ").format(price) + " so'm"
+  }
 
-  const isOutOfStock = item.stock === 0;
-  const isLowStock = item.stock > 0 && item.stock <= 5;
-  const maxQuantity = Math.min(10, item.stock);
+  const isOutOfStock = item.stock === 0
+  const isLowStock = item.stock > 0 && item.stock <= 5
+  const maxQuantity = Math.min(10, item.stock)
 
   return (
     <Card className="overflow-hidden card-interactive hover-lift group animate-fade-in">
@@ -60,17 +60,17 @@ export function MenuItemCard({ item, onAddToCart }: MenuItemCardProps) {
 
         <div className="absolute top-3 right-3 flex flex-col gap-2">
           {item.popular && (
-            <Badge className="bg-[#00B0C3] text-white animate-wiggle shadow-lg py-1">
-              {t("app.populars")}
+            <Badge className="bg-brand-accent text-accent-foreground animate-wiggle shadow-lg">
+              {t("app.popularity")}
             </Badge>
           )}
           {isOutOfStock ? (
-            <Badge variant="destructive" className="!bg-red-600 shadow-lg py-1">
-              {t("app.stocks")}
+            <Badge variant="destructive" className="shadow-lg">
+              {t("app.out_stock")}
             </Badge>
           ) : isLowStock ? (
-            <Badge className="text-white shadow-lg animate-pulse-slow">
-              {item.stock} {t("app.left")}
+            <Badge className="bg-orange-500 text-white shadow-lg animate-pulse-slow">
+              {item.stock} {t("app.stock")}
             </Badge>
           ) : null}
         </div>
@@ -79,10 +79,10 @@ export function MenuItemCard({ item, onAddToCart }: MenuItemCardProps) {
           <Button
             variant="secondary"
             size="sm"
-            className="bg-white/95 hover:bg-white text-black shadow-lg animate-scale-in cursor-pointer"
+            className="bg-[#00B0C3] hover:bg-[#00B0C3]/80 cursor-pointer text-foreground shadow-lg animate-scale-in"
           >
             <Eye className="w-4 h-4 mr-2" />
-            {t("app.view")}
+            {t("app.details")}
           </Button>
         </div>
       </div>
@@ -104,8 +104,8 @@ export function MenuItemCard({ item, onAddToCart }: MenuItemCardProps) {
             </p>
             <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">
               {isOutOfStock
-                ? `${t("app.stocks")}`
-                : `${item.stock} ${t("app.left")}`}
+                ? t("app.out_stock")
+                : `${item.stock} ${t("app.stock")}`}
             </span>
           </div>
         </div>
@@ -115,7 +115,7 @@ export function MenuItemCard({ item, onAddToCart }: MenuItemCardProps) {
             disabled
             className="w-full bg-muted text-muted-foreground cursor-not-allowed"
           >
-            {t("app.stocks")}
+            {t("app.out_stock")}
           </Button>
         ) : (
           <div className="space-y-3">

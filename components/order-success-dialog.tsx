@@ -52,10 +52,10 @@ export function OrderSuccessDialog({ isOpen, onClose, orderData }: OrderSuccessD
           </CardTitle>
           <div className="flex items-center justify-center gap-2 mt-2">
             <Badge variant="outline" className="text-[#302dbb]">
-              Buyurtma uchun id {orderData.orderId}
+              Order #{orderData.orderId}
             </Badge>
             {orderData.isConfigured ? (
-              <Badge className="bg-green-500/70 hover:bg-green-600">{t("telegram.configured") || "Telegram Ready"}</Badge>
+              <Badge className="bg-green-500 hover:bg-green-600">{t("telegram.configured") || "Telegram Ready"}</Badge>
             ) : (
               <Badge variant="secondary">{t("telegram.manual_mode") || "Manual Mode"}</Badge>
             )}
@@ -64,12 +64,12 @@ export function OrderSuccessDialog({ isOpen, onClose, orderData }: OrderSuccessD
 
         <CardContent className="space-y-6">
           <div className="text-center space-y-2">
-            <p className="text-white">
+            <p className="text-muted-foreground">
               {t("order.success_message") || "Your order has been prepared and is ready to be sent to our team."}
             </p>
-            {/* <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               {t("order.contact_soon") || "We will contact you soon to confirm delivery details."}
-            </p> */}
+            </p>
           </div>
 
           {/* Order Message Preview */}
@@ -84,7 +84,7 @@ export function OrderSuccessDialog({ isOpen, onClose, orderData }: OrderSuccessD
           <div className="space-y-3">
             {orderData.isConfigured ? (
               <div className="space-y-2">
-                <p className="text-sm text-center text-green-600/80 font-medium">
+                <p className="text-sm text-center text-green-600 font-medium">
                   ✅ {t("telegram.auto_sent") || "This order will be automatically sent to your Telegram bot."}
                 </p>
                 {/* {orderData.telegramUrl && (
